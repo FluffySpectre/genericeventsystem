@@ -33,7 +33,7 @@ public class BetterEventSystem<T> : BetterEventSystem {
 		EventSystemInstance.SafeRaise(eventData);
 	}
 
-	private static void CleanCurrentEventSystem() {
+	static void CleanCurrentEventSystem() {
 		if (eventSystemInstance != null) {
 			eventSystemInstance.CleanSubscribersList();
 			// we set our instance to null, so we can check whether we have to create a new instance next time
@@ -41,7 +41,7 @@ public class BetterEventSystem<T> : BetterEventSystem {
 		}
 	}
 
-	private static BetterEventSystem<T> EventSystemInstance {
+	static BetterEventSystem<T> EventSystemInstance {
 		get { return eventSystemInstance ?? (eventSystemInstance = new BetterEventSystem<T>()); }
 	}
 
@@ -50,41 +50,41 @@ public class BetterEventSystem<T> : BetterEventSystem {
 		BetterEventSystem<T>.CleanCurrentEventSystem();
 	}
 
-	private void CleanSubscribersList() {
+	void CleanSubscribersList() {
 		eventBackingDelegate = null;
 	}
 
-	private void SafeRaise(T eventData) {
+	void SafeRaise(T eventData) {
 		if (eventBackingDelegate != null) {
 			eventBackingDelegate(eventData);
 		}
 	}
 
-	private BetterEventSystem() { }
+	BetterEventSystem() { }
 }
 
 /// <summary>
 /// a maintenance class used to cleanup every used event system
 /// </summary>
 public static class BetterEventSystemMaintenance {
-	private static readonly List<BetterEventSystem> globalEventSystems = new List<BetterEventSystem>();
+	static readonly List<BetterEventSystem> betterEventSystems = new List<BetterEventSystem>();
 
 	public static void RegisterNewEventSystem(BetterEventSystem eventSystem) {
 		// if we don't have this event system in our list yet
-		if (!globalEventSystems.Contains(eventSystem)) {
+		if (!betterEventSystems.Contains(eventSystem)) {
 			// only then we add it to the list
-			globalEventSystems.Add(eventSystem);
+			betterEventSystems.Add(eventSystem);
 		}
 	}
 
 	public static void CleanupEventSystem() {
 		// for every registered event system
-		foreach (var globalEventSystem in globalEventSystems) {
+		foreach (var betterEventSystem in betterEventSystems) {
 			// we let it clean itself of the subscribers and stuff
-			globalEventSystem.CleanEventSystem();
+			betterEventSystem.CleanEventSystem();
 		}
 
 		// and clear our list, so it becomes fresh and empty
-		globalEventSystems.Clear();
+		betterEventSystems.Clear();
 	}
 }
