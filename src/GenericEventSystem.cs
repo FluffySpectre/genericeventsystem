@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-public abstract class BetterEventSystem {
+public abstract class GenericEventSystem {
 	public abstract void CleanEventSystem();
 }
 
@@ -9,8 +9,8 @@ public abstract class BetterEventSystem {
 /// the actual generic event system class via which you can raise and get events and pass data
 /// </summary>
 /// <typeparam name="T">The type of the event for this system</typeparam>
-public class BetterEventSystem<T> : BetterEventSystem {
-	private static BetterEventSystem<T> eventSystemInstance;
+public class GenericEventSystem<T> : GenericEventSystem {
+	private static GenericEventSystem<T> eventSystemInstance;
 	private Action<T> eventBackingDelegate;
 
 	public static event Action<T> EventHappened {
@@ -19,7 +19,7 @@ public class BetterEventSystem<T> : BetterEventSystem {
 			if (EventSystemInstance.eventBackingDelegate == null) {
 				// we register this (newly) closed generic class in the Maintenance class
 				// so we can easily clean it up later
-				BetterEventSystemMaintenance.RegisterNewEventSystem(EventSystemInstance);
+				GenericEventSystemMaintenance.RegisterNewEventSystem(EventSystemInstance);
 			}
 
 			// and of cource we subscribe the provided method to this particular event
@@ -41,13 +41,13 @@ public class BetterEventSystem<T> : BetterEventSystem {
 		}
 	}
 
-	static BetterEventSystem<T> EventSystemInstance {
-		get { return eventSystemInstance ?? (eventSystemInstance = new BetterEventSystem<T>()); }
+	static GenericEventSystem<T> EventSystemInstance {
+		get { return eventSystemInstance ?? (eventSystemInstance = new GenericEventSystem<T>()); }
 	}
 
 	public override void CleanEventSystem() {
 		// notice that we call a static method here
-		BetterEventSystem<T>.CleanCurrentEventSystem();
+		GenericEventSystem<T>.CleanCurrentEventSystem();
 	}
 
 	void CleanSubscribersList() {
@@ -60,31 +60,31 @@ public class BetterEventSystem<T> : BetterEventSystem {
 		}
 	}
 
-	BetterEventSystem() { }
+	GenericEventSystem() { }
 }
 
 /// <summary>
 /// a maintenance class used to cleanup every used event system
 /// </summary>
-public static class BetterEventSystemMaintenance {
-	static readonly List<BetterEventSystem> betterEventSystems = new List<BetterEventSystem>();
+public static class GenericEventSystemMaintenance {
+	static readonly List<GenericEventSystem> genericEventSystems = new List<GenericEventSystem>();
 
-	public static void RegisterNewEventSystem(BetterEventSystem eventSystem) {
+	public static void RegisterNewEventSystem(GenericEventSystem eventSystem) {
 		// if we don't have this event system in our list yet
-		if (!betterEventSystems.Contains(eventSystem)) {
+		if (!genericEventSystems.Contains(eventSystem)) {
 			// only then we add it to the list
-			betterEventSystems.Add(eventSystem);
+			genericEventSystems.Add(eventSystem);
 		}
 	}
 
 	public static void CleanupEventSystem() {
 		// for every registered event system
-		foreach (var betterEventSystem in betterEventSystems) {
+		foreach (var genericEventSystem in genericEventSystems) {
 			// we let it clean itself of the subscribers and stuff
-			betterEventSystem.CleanEventSystem();
+			genericEventSystem.CleanEventSystem();
 		}
 
 		// and clear our list, so it becomes fresh and empty
-		betterEventSystems.Clear();
+		genericEventSystems.Clear();
 	}
 }
