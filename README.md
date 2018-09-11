@@ -1,11 +1,10 @@
-Generic Event System
+# Generic Event System
 
 This approach keeps the event data and the event management logic separate. It makes use of a templated static class which removes the need for a specialized event base class and explicit type casting.
 
-Usage:
+## Usage:
 
-Emit Event
-===========
+### Emit Event
 
     using BetterEventSystem;
 
@@ -23,8 +22,7 @@ Emit Event
     // emit the event
     EventSystem<EnemyKilledEvent>.Emit(e);
 
-Listen for Event
-================
+### Listen for Event
 
     using BetterEventSystem;
 
