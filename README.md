@@ -4,7 +4,8 @@ This approach keeps the event data and the event management logic separate. It m
 
 Usage:
 
-*Emit Event*
+Emit Event
+===========
 
     using BetterEventSystem;
 
@@ -22,11 +23,12 @@ Usage:
     // emit the event
     EventSystem<EnemyKilledEvent>.Emit(e);
 
-*Listen for Event*
+Listen for Event
+================
 
     using BetterEventSystem;
 
-    EventSystem<EnemyKilledEvent>.EventHappened += (enemyKilledEvent) => {
+    EventSystem<EnemyKilledEvent>.EventHappened += (e) => {
         Console.WriteLine(e.EnemyName + " killed by " + e.KillerName);
 
         // do awesome stuff...
