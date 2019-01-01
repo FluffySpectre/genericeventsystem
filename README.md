@@ -6,7 +6,7 @@ This approach keeps the event data and the event management logic separate. It m
 
 ### Emit Event
 
-    using BetterEventSystem;
+    using GenericEventSystem;
 
     // define a event class
     public class EnemyKilledEvent {
@@ -24,7 +24,7 @@ This approach keeps the event data and the event management logic separate. It m
 
 ### Listen for Event
 
-    using BetterEventSystem;
+    using GenericEventSystem;
 
     EventSystem<EnemyKilledEvent>.EventHappened += (e) => {
         Console.WriteLine(e.EnemyName + " killed by " + e.KillerName);
