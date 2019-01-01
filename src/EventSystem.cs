@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace BetterEventSystem
+namespace GenericEventSystem
 {
 	public abstract class EventSystem {
 		public abstract void CleanEventSystem();
